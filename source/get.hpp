@@ -69,6 +69,9 @@ std::wstring get(const std::string & input);
 //! @return Wyjściowy ciąg znaków.
 //!
 std::string get(const std::wstring & input);
+// Dla kompletności - funkcje, które tylko przepisują wartość.
+void get(const std::string & input,std::string & output);
+void get(const std::wstring & input,std::wstring & output);
 //===========================================
 } }
 //============================================

@@ -1,5 +1,5 @@
 //! @file
-//! @brief UTF8 get module - Source file.
+//! @brief UTF8 stream module - Header file.
 //! @author Mariusz Ornowski (mariusz.ornowski@ict-project.pl)
 //! @version 1.0
 //! @date 2012-2021
@@ -33,84 +33,74 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **************************************************************/
+#ifndef _ICT_UTF8_STREAM_HEADER
+#define _ICT_UTF8_STREAM_HEADER
 //============================================
+#include <string>
+#include <iostream>
+#include <stdexcept>
 #include "get.hpp"
-#include "robot.hpp"
 //============================================
 namespace ict { namespace utf8 {
 //===========================================
-void get(const std::string & input,std::wstring & output){
-  ict::utf8::robot r;
-  output.clear();
-  for (const char & c : input){
-    if (r(c).isReady()){
-      output+=r.getChar();
+//! Struktura, która przechuwuje argumenty
+template<class String> struct arg_template {
+    String & arg;
+    const String & carg;
+    static String empty;
+};
+template <class String> String arg_template<String>::empty;
+//! 
+//! @brief Zwraca strukturę z parametrami.
+//! 
+//! @param a Referencja do string.
+//! @return Struktura z parametrami.
+//! 
+template<class String> inline arg_template<String> s(String & a) {
+    return {a,a};
+}
+//! 
+//! @brief Zwraca strukturę z parametrami.
+//! 
+//! @param a Referencja do string.
+//! @return Struktura z parametrami.
+//! 
+template<class String> inline arg_template<String> s(const String & a) {
+    return {arg_template<String>::empty,a};
+}
+//! 
+//! @brief Operator zapisu do strumienia
+//! 
+//! @param os Strumień do zapisu.
+//! @param s Struktura z parametrami.
+//! @return Strumień do zapisu.
+//! 
+template<typename Char,typename Traits,class String> 
+std::basic_ostream<Char,Traits> & operator<<(std::basic_ostream<Char,Traits> & os,arg_template<String> s){
+    std::basic_string<Char> tmp;
+    ict::utf8::get(s.carg,tmp);
+    os<<tmp;
+    return(os);
+}
+//! 
+//! @brief Operator odczytu ze strumienia
+//! 
+//! @param os Strumień do odczytu.
+//! @param s Struktura z parametrami.
+//! @return Strumień do odczytu.
+//! 
+template<typename Char,typename Traits,class String> 
+std::basic_istream<Char,Traits> & operator>>(std::basic_istream<Char,Traits> & is,arg_template<String> s){
+    std::basic_string<Char> tmp;
+    is>>tmp;
+    ict::utf8::get(tmp,s.arg);
+    if (!arg_template<String>::empty.empty()) {
+        arg_template<String>::empty.clear();
+        std::invalid_argument("You can't write to a const variable!");
     }
-  }
-}
-void get(const std::wstring & input,std::string & output){
-  ict::utf8::robot r;
-  output.clear();
-  for (const wchar_t & c : input){
-    if (r(c).isReady()){
-      output+=r.getString();
-    }
-  }
-}
-std::wstring get(const std::string & input){
-  std::wstring output;
-  get(input,output);
-  return(output);
-}
-std::string get(const std::wstring & input){
-  std::string output;
-  get(input,output);
-  return(output);
-}
-void get(const std::string & input,std::string & output){
-    output=input;
-}
-void get(const std::wstring & input,std::wstring & output){
-    output=input;
+    return(is);
 }
 //===========================================
 } }
-//===========================================
-#ifdef ENABLE_TESTING
-#include "test.hpp"
-REGISTER_TEST(utf8_get,tc1){
-  std::size_t k=0;
-  std::cout<<" Test funcji ict::utf8::get(string)"<<std::endl;
-  for (const auto & s : ict::test::test_string){
-    std::string input(s);
-    std::wstring output(ict::test::test_wstring[k++]);
-    std::wstring out=ict::utf8::get(input);
-    if (output!=out){
-      std::cout<<" Błąd!!!"<<std::endl;
-      std::cout<<" input="<<input<<std::endl;
-      std::wcout<<L" output(oczekiwany)="<<output<<std::endl;
-      std::wcout<<L" output(otrzymany)="<<out<<std::endl;
-      return(-1);
-    }
-  }
-  return(0);
-}
-REGISTER_TEST(utf8_get,tc2){
-  std::size_t k=0;
-  std::cout<<" Test funcji ict::utf8::get(wstring)"<<std::endl;
-  for (const auto & s : ict::test::test_wstring){
-    std::wstring input(s);
-    std::string output(ict::test::test_string[k++]);
-    std::string out=ict::utf8::get(input);
-    if (output!=out){
-      std::cout<<" Błąd!!!"<<std::endl;
-      std::wcout<<L" input="<<input<<std::endl;
-      std::cout<<" output(oczekiwany)="<<output<<std::endl;
-      std::cout<<" output(otrzymany)="<<out<<std::endl;
-      return(-1);
-    }
-  }
-  return(0);
-}
+//============================================
 #endif
-//===========================================

@@ -1,5 +1,5 @@
 //! @file
-//! @brief UTF8 get module - Source file.
+//! @brief UTF8 stream module - Source file.
 //! @author Mariusz Ornowski (mariusz.ornowski@ict-project.pl)
 //! @version 1.0
 //! @date 2012-2021
@@ -34,82 +34,43 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **************************************************************/
 //============================================
-#include "get.hpp"
-#include "robot.hpp"
+#include "stream.hpp"
 //============================================
 namespace ict { namespace utf8 {
 //===========================================
-void get(const std::string & input,std::wstring & output){
-  ict::utf8::robot r;
-  output.clear();
-  for (const char & c : input){
-    if (r(c).isReady()){
-      output+=r.getChar();
-    }
-  }
-}
-void get(const std::wstring & input,std::string & output){
-  ict::utf8::robot r;
-  output.clear();
-  for (const wchar_t & c : input){
-    if (r(c).isReady()){
-      output+=r.getString();
-    }
-  }
-}
-std::wstring get(const std::string & input){
-  std::wstring output;
-  get(input,output);
-  return(output);
-}
-std::string get(const std::wstring & input){
-  std::string output;
-  get(input,output);
-  return(output);
-}
-void get(const std::string & input,std::string & output){
-    output=input;
-}
-void get(const std::wstring & input,std::wstring & output){
-    output=input;
-}
+
 //===========================================
 } }
 //===========================================
 #ifdef ENABLE_TESTING
 #include "test.hpp"
-REGISTER_TEST(utf8_get,tc1){
-  std::size_t k=0;
-  std::cout<<" Test funcji ict::utf8::get(string)"<<std::endl;
-  for (const auto & s : ict::test::test_string){
-    std::string input(s);
-    std::wstring output(ict::test::test_wstring[k++]);
-    std::wstring out=ict::utf8::get(input);
-    if (output!=out){
-      std::cout<<" Błąd!!!"<<std::endl;
-      std::cout<<" input="<<input<<std::endl;
-      std::wcout<<L" output(oczekiwany)="<<output<<std::endl;
-      std::wcout<<L" output(otrzymany)="<<out<<std::endl;
-      return(-1);
-    }
-  }
+#include <sstream>
+REGISTER_TEST(utf8_stream,tc1){
+  std::wstring str(L",out2");
+  std::cout<<ict::utf8::s(L"out1")<<ict::utf8::s(str)<<std::endl;
   return(0);
 }
-REGISTER_TEST(utf8_get,tc2){
-  std::size_t k=0;
-  std::cout<<" Test funcji ict::utf8::get(wstring)"<<std::endl;
-  for (const auto & s : ict::test::test_wstring){
-    std::wstring input(s);
-    std::string output(ict::test::test_string[k++]);
-    std::string out=ict::utf8::get(input);
-    if (output!=out){
-      std::cout<<" Błąd!!!"<<std::endl;
-      std::wcout<<L" input="<<input<<std::endl;
-      std::cout<<" output(oczekiwany)="<<output<<std::endl;
-      std::cout<<" output(otrzymany)="<<out<<std::endl;
-      return(-1);
-    }
-  }
+REGISTER_TEST(utf8_stream,tc2){
+  std::string str(",out2");
+  std::wcout<<ict::utf8::s("out1")<<ict::utf8::s(str)<<std::endl;
+  return(0);
+}
+REGISTER_TEST(utf8_stream,tc3){
+  std::wstring str(L"inout1");
+  std::stringstream ios;
+  ios<<ict::utf8::s(L"out1")<<ict::utf8::s(str)<<std::endl;
+  ios>>ict::utf8::s(str);
+  std::wcout<<str<<std::endl;
+  if (str!=L"out1inout1") return(1);
+  return(0);
+}
+REGISTER_TEST(utf8_stream,tc4){
+  std::string str("inout1");
+  std::wstringstream ios;
+  ios<<ict::utf8::s("out1")<<ict::utf8::s(str)<<std::endl;
+  ios>>ict::utf8::s(str);
+  std::cout<<str<<std::endl;
+  if (str!="out1inout1") return(1);
   return(0);
 }
 #endif

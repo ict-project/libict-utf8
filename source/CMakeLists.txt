@@ -28,6 +28,7 @@ set(CMAKE_SOURCE_FILES
   robot.cpp
   get.cpp
   transfer.cpp
+  stream.cpp
 )
 
 add_library(ict-static STATIC ${CMAKE_SOURCE_FILES})
@@ -84,6 +85,10 @@ add_test(NAME ict-utf8_transfer-tc1 COMMAND ${PROJECT_NAME}-test ict utf8_transf
 add_test(NAME ict-utf8_transfer-tc2 COMMAND ${PROJECT_NAME}-test ict utf8_transfer tc2)
 add_test(NAME ict-utf8_transfer-tc3 COMMAND ${PROJECT_NAME}-test ict utf8_transfer tc3)
 add_test(NAME ict-utf8_transfer-tc4 COMMAND ${PROJECT_NAME}-test ict utf8_transfer tc4)
+add_test(NAME ict-utf8_stream-tc1 COMMAND ${PROJECT_NAME}-test ict utf8_stream tc1)
+add_test(NAME ict-utf8_stream-tc2 COMMAND ${PROJECT_NAME}-test ict utf8_stream tc2)
+add_test(NAME ict-utf8_stream-tc3 COMMAND ${PROJECT_NAME}-test ict utf8_stream tc3)
+add_test(NAME ict-utf8_stream-tc4 COMMAND ${PROJECT_NAME}-test ict utf8_stream tc4)
 
 ################################################################
 #set(CPACK_GENERATOR "TZ;TGZ;STGZ;DEB;RPM") # Linux
