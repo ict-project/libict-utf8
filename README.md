@@ -1,4 +1,4 @@
-# Simple UTF8 encoder/decoder implementation [![Build Status](https://travis-ci.org/ict-project/libict-utf8.svg?branch=main)](https://travis-ci.org/ict-project/libict-utf8)
+# Simple UTF8 encoder/decoder implementation
 
 This code implements a simple UTF8 encoder/decoder.
 
@@ -9,7 +9,7 @@ See:
 * [stream](source/stream.md) for more details about UTF8 stream modifier (since v1.1).
 
 Releases:
-* Branch release-v1 [![Build Status](https://travis-ci.org/ict-project/libict-utf8.svg?branch=release-v1)](https://travis-ci.org/ict-project/libict-utf8)
+* Branch release-v1
 
 ## Building instructions
 
