@@ -37,6 +37,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define _ICT_UTF8_ROBOT_HEADER
 //============================================
 #include <string>
+#include <cstdint>
 //============================================
 namespace ict { namespace utf8 {
 //===========================================
